@@ -1,0 +1,55 @@
+import {Component} from 'react'
+
+import './App.css'
+import PhoneForm from "./component/PhoneForm.jsx";
+import PhoneList from "./component/PhoneList.jsx";
+
+class App extends Component{
+    id = 2;
+    state = {
+        information : [
+            {
+                id : 0,
+                name : '홍길동',
+                phone : '010-1111-1111'
+            },{
+                id : 1,
+                name : '이순신',
+                phone : '010-2222-2222'
+            }
+        ]
+    }
+    //추가(기존 값에 추가)
+    handleCreate = (data) => {
+        const {information} = this.state;
+
+        this.setState({
+            information : information.concat({
+                id : this.id++, ...data       /* ...을 쓰면 ...뒤에 기존의 값을 가져온다는 의미 */
+            })
+
+        })
+    }
+
+    //삭제
+    handleremove = (id) => {
+        const {information} = this.state;
+        this.setState({
+            information : information
+                .filter(info => info.id !== id)
+        })
+    }
+
+    render(){
+        return(
+            <div>
+                <PhoneForm onCreate = {this.handleCreate} />
+                <PhoneList
+                    data = {this.state.information}
+                onRemove = {this.handleremove} />
+            </div>
+        )
+    }
+}
+
+export default App
