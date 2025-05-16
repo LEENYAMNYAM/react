@@ -20,12 +20,17 @@ function App() {
         console.log('app insertBoard board : ', boards)
     }
 
+    const boardDelete = (boardId) => {
+        console.log('app boardDelete boardId : ', boardId)
+        setBoard(boards.filter((board) => board.id !== boardId))
+    }
+
   return(
       <div>
           <h1>React10 Board</h1>
           <hr/>
           <BoardForm insertBoard={insertBoard}/>
-          <BoardList boards={boards}/>
+          <BoardList boards={boards} boardDelete={boardDelete}/>
       </div>
   )
 }

@@ -2,22 +2,25 @@ import {useRef, useState} from "react";
 
 export default function BoardForm({insertBoard}) {
     const inputRef = useRef();
-    const [formData, setFormData] = useState({
+    const[ formData, setFormData ] = useState({
         title: '',
         content: ''
-    });
-    const submitBoard =(e) => {
+    })
+
+    // 값 변경
+    const formChange = (e) => {
+      setFormData({
+          ...formData,
+          [e.target.name] : e.target.value
+      })
+    }
+
+    // 추가하기
+    const submitBoard = (e) => {
         e.preventDefault();
         insertBoard(formData)
-        inputRef.current.value = '';
-        inputRef.current.focus();
-
-    }
-    const formChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        })
+        inputRef.current.value = ''
+        inputRef.current.focus()
     }
 
     return(
@@ -31,7 +34,7 @@ export default function BoardForm({insertBoard}) {
                       cols={60} rows={5}
                       onChange={formChange}
                       value={formData.content}
-                      ></textarea>
+                      ref={inputRef} />
             <br/>
             <button onClick={submitBoard}> 입력 </button>
         </div>
