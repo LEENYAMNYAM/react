@@ -1,6 +1,6 @@
 import PhoneItem from "./phoneItem.jsx";
 
-export default function PhoneList({phoneList, onRemove}){
+export default function PhoneList({phoneList, onRemove, onUpdate}){
     return(
         <div>
             <h1>PhoneList</h1>
@@ -8,7 +8,8 @@ export default function PhoneList({phoneList, onRemove}){
                 return (
                     <PhoneItem key={data.id}
                                {...data}
-                               onRemove={onRemove}/>)}
+                               onRemove={onRemove}
+                               onUpdate={onUpdate}/>)}
             )}
         </div>
     )

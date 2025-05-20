@@ -25,6 +25,8 @@ function reducer(state, action){
             return [...state, action.newdata];
         case 'REMOVE':
             return state.filter(data => data.id !== action.id);
+        case 'UPDATE':
+            return state.map(data => data.id === action.data.id ? action.data : data);
         default : {
             return state;
         }
@@ -60,10 +62,17 @@ function App() {
         })
     }
 
+    //
+    const onUpdate = (targetPhone) => {
+        dispatch({
+            type : 'UPDATE',
+            data : targetPhone
+        })
+    }
     return(
       <div>
           <PhoneForm onCreate={onCreate} />
-          <PhoneList phoneList={phoneList} onRemove={onRemove}/>
+          <PhoneList phoneList={phoneList} onRemove={onRemove} onUpdate={onUpdate}/>
       </div>
 
   )
