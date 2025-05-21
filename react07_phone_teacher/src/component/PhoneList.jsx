@@ -1,6 +1,6 @@
 import PhoneItem from "./PhoneItem.jsx";
 
-function PhoneList({datas, onRemove}){
+function PhoneList({datas, onRemove, onUpdate}){
     return(
         <div>
             <h1>PhoneList</h1>
@@ -8,7 +8,8 @@ function PhoneList({datas, onRemove}){
                 return (
                     <PhoneItem key={data.id}
                                {...data}
-                               onRemove={onRemove}/>)}
+                               onRemove={onRemove}
+                               onUpdate={onUpdate}/>)}
                 )}
         </div>
     )

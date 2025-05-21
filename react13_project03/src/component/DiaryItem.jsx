@@ -4,15 +4,20 @@ import Button from "./Button.jsx";
 import {useNavigate} from "react-router-dom";
 const DiaryItem = ({id, emotionId, content, date}) => {
     const navigate = useNavigate();
+    //수정
     const goEdit = () => {
         navigate(`/edit/${id}`);
+    }
+    // 상세보기
+    const goDetail = () => {
+        navigate(`/diary/${id}`);
     }
     return (
         <div className={'DiaryItem'}>
             <div>
                 <img src={getEmotionImgById(emotionId)} alt={`emotion${emotionId}`}/>
             </div>
-            <div className={"info_section"}>
+            <div className={"info_section"} onClick={goDetail}>
                 <div className={"date_wrapper"}>
                     {new Date(date).toLocaleDateString()}
                 </div>

@@ -1,4 +1,5 @@
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import PhoneForm from "./component/PhoneForm.jsx";
 import PhoneList from "./component/PhoneList.jsx";
 import {useRef, useState} from "react";
@@ -31,12 +32,15 @@ function App() {
     const handleRemove = (id) => {
         setDatas(datas.filter(item => item.id !== id));
     }
-
+    //수정
+    const handleUpdate = (updateData) => {
+        setDatas(datas.map(item => item.id === updateData.id ? updateData : item));
+    }
 
   return(
       <div>
           <PhoneForm onCreate={handleCreate}/>
-          <PhoneList datas={datas} onRemove={handleRemove} />
+          <PhoneList datas={datas} onRemove={handleRemove} onUpdate={handleUpdate}/>
       </div>
   )
 }

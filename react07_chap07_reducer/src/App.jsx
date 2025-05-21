@@ -62,7 +62,7 @@ function App() {
         })
     }
 
-    //
+    //수정
     const onUpdate = (targetPhone) => {
         dispatch({
             type : 'UPDATE',

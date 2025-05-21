@@ -1,25 +1,40 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import {Button} from "react-bootstrap";
 
-function PhoneForm({onCreate}){
-    const inputRef1 = useRef();
-    const inputRef2 = useRef();
+function PhoneForm({onCreate, initData}){
+    const inputRef = useRef();
     let [data, setData] = useState({
-        name : '',
-        phone : ''
+        id: '',
+        name: '',
+        phone: ''
     })
+
+    useEffect(() => {
+        if(initData) {
+            setData(initData)
+        }else {
+            setData({
+                id: '',
+                name: '',
+                phone: ''
+            })
+        }
+    }, [initData])
+
 
     const handleSubmit = (e) => {
         console.log('PhoneForm handleSubmit : ' + data)
+        console.log('PhoneForm handleSubmit : ' + data.id)
+        console.log('PhoneForm handleSubmit : ' + data.name)
+        console.log('PhoneForm handleSubmit : ' + data.phone)
         e.preventDefault()
         onCreate(data)
-        data = {
+        setData ({
             id : 0,
             name : '',
             phone : ''
-        }
-        inputRef1.current.value = ''
-        inputRef2.current.value = ''
-        inputRef1.current.focus()
+        });
+        inputRef.current.focus()
 
     }
 
@@ -30,7 +45,6 @@ function PhoneForm({onCreate}){
             ...data,
             [e.target.name] : e.target.value
         })
-
     }
 
     return(
@@ -39,14 +53,18 @@ function PhoneForm({onCreate}){
                 <input placeholder='이름'
                        name='name'
                        onChange={handleChange}
-                       ref={inputRef1}
+                       value={data.name || ''}
+                       ref={inputRef}
                        />
                 <input placeholder='전화번호'
                        name='phone'
                        onChange={handleChange}
-                       ref={inputRef2}
+                       value={data.phone || ''}
                        />
-                <button type='submit'>등록</button>
+                {/*<button type='submit'>등록</button>*/}
+                <Button variant={'primary'} type={'submit'}>
+                    {initData ? '수정' : '추가'}
+                </Button>
             </form>
         </div>
     )

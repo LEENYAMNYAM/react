@@ -1,13 +1,13 @@
 import "./Editor.css";
 import Button from "./Button.jsx";
-import {emotionList} from "../util.jsx";
+import {emotionList, getFormattedDate} from "../util.jsx";
 import EmotionItem from "./EmotionItem.jsx";
 import {useCallback, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 const Editor = ({onSubmit, initData}) => {
     const navigate = useNavigate();
     const [state, setState] = useState({
-        date : '2025-05-20',
+        date : getFormattedDate(new Date()),
         emotionId : 3,
         content : ""
     })
@@ -16,7 +16,7 @@ const Editor = ({onSubmit, initData}) => {
         if(initData) {
             setState({
                 ...initData,
-                date : initData.date
+                date : getFormattedDate( new Date(initData.date))
             })
         }
     }, [initData])
