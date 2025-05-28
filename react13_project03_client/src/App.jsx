@@ -5,111 +5,98 @@ import New from "./pages/New.jsx";
 import Diary from "./pages/Diary.jsx";
 import Edit from "./pages/Edit.jsx";
 import Home from "./pages/Home.jsx";
-import React, {useEffect, useReducer, useRef, useState} from "react";
-const mockData = [
-    {
-        id: "mock1",
-        date: new Date().getTime() - 1,
-        content: "mock1",
-        emotionId: 1,
-    },
-    {
-        id: "mock2",
-        date: new Date().getTime() - 2,
-        content: "mock2",
-        emotionId: 2,
-    },
-    {
-        id: "mock3",
-        date: new Date().getTime() - 3,
-        content: "mock3",
-        emotionId: 3,
-    },
-];
+import React, {useEffect, useReducer, useState} from "react";
+import axios from "axios";
+
+export const DiaryStateContext   = React.createContext();
+export const DiaryDispatchContext = React.createContext();
 
 function reducer(state, action) {
     switch (action.type) {
         case 'INIT': {
+            console.log("init ")
             return action.data;
         }
         case 'CREATE': {
             return [action.data, ...state];
         }
-        case 'UPDATE': {
-            return state.map(it => (
-                String(it.id) === String(action.data.id)? action.data : it
-            ))
-        }
         case 'DELETE': {
-            return state.filter(it => String(it.id) !== String(action.targetId))
+            return state.filter((it)=> String(it.id) !==String(action.targetId));
         }
-        default: {
-            return state;
+        case 'UPDATE' : {
+            return state.map((it) => String(it.id)===String(action.data.id) ? {...action.data} : it)
         }
-
     }
-}
-
-export const DiaryStateContext = React.createContext();
-export const DiaryDispatchContext = React.createContext();
+}   //reducer
 
 function App() {
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const [data, dispatch] = useReducer(reducer, [])
-    const idRef = useRef(0);
 
     useEffect(() => {
-        dispatch(
-            {
-                type : 'INIT',
-                data : mockData
-            }
-        );
-        setIsDataLoaded(true);
+        axios.get('/api/diary/list')
+            .then((resp) => {
+                console.log("axios list : ", resp.data)
+                dispatch({
+                    type : 'INIT',
+                    data : resp.data
+                })
+            })
+        setIsDataLoaded(true)
     }, [])
 
     //추가
     const onCreate = (date, content, emotionId) => {
-        console.log("app onCreate content : ", content)
-        console.log("app onCreate date : ", date)
-        console.log("app onCreate emotionId : ", emotionId)
-        dispatch(
-            {
-                type : "CREATE",
+        axios.post('/api/diary/insert', {
+            date : date,
+            content : content,
+            emotionId : emotionId
+        }).then((resp) =>{
+            console.log("resp insert : ", resp.data)
+            dispatch({
+                type : 'CREATE',
                 data : {
-                    id : idRef.current++,
-                    date : new Date(date).getTime(),
-                    content,
-                    emotionId,
+                    id :resp.data.id,
+                    date : resp.data.date,
+                    content : resp.data.content,
+                    emotionId : resp.data.emotionId
                 }
-            }
-        )
-    }
-    //수정
-    const onUpdate = (targetId, date, content, emotionId) => {
-        dispatch({
-            type : 'UPDATE',
-            data : {
-                id : targetId,
-                date : new Date(date).getTime(),
-                content,
-                emotionId,
-            }
+            })
         })
     }
     //삭제
     const onDelete = (targetId) => {
-        console.log("app onDelete targetId : ", targetId)
-        dispatch({
-            type : 'DELETE',
-            targetId
+        axios.delete(`/api/diary/delete/${targetId}`)
+            .then(() => {
+                dispatch({
+                    type : 'DELETE',
+                    targetId
+                })
+            })
+    }
+    //수정
+    const onUpdate = (targetId, date, content, emotionId) => {
+        axios.put(`/api/diary/update/${targetId}`, {
+            id : targetId,
+            date,
+            content,
+            emotionId
+        }).then(resp =>{
+            console.log('onUpdate resp : ', resp.data)
+            dispatch({
+                type: 'UPDATE',
+                data : {
+                    id:targetId,
+                    date,
+                    content,
+                    emotionId
+                }
+            })
         })
     }
-
     if(!isDataLoaded) {
         return <div>데이터를 불러오는 중입니다.</div>
     }else {
-
         return(
             <DiaryStateContext.Provider value={ data }>
                 <DiaryDispatchContext.Provider value={{onCreate, onUpdate, onDelete}}>
