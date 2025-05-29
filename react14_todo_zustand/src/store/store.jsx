@@ -26,6 +26,12 @@ const useTodoStore = create((set) => ({
     todos : mockTodo,
     addTodo : (newTodo) => set((state)=>({
         todos : [...state.todos, newTodo]
+    })),
+    removeTodo : (removeTodo) => set((state) => ({
+        todos :  state.todos.filter((todo) => todo !== removeTodo)
+    })),
+    changeTodo : (changeTodo) => set((state) => ({
+        todos : state.todos.map((todo) => todo === changeTodo ? { ...todo, isDone: !todo.isDone} : todo )
     }))
-}) )
+}))
 export default useTodoStore;
