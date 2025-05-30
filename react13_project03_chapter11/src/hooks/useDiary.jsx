@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {DiaryStateContext} from "../App.jsx";
 import {useNavigate} from "react-router-dom";
-import useDiaryStore from "../store/useDiaryStore.jsx";
 
 const useDiary = (id) => {
-    const data = useDiaryStore((state) => state.DiaryList)
+    const data = useContext(DiaryStateContext)
     const [diary, setDiary] = useState();
     const navigate = useNavigate();
     useEffect(() => {

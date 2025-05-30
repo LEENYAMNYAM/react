@@ -1,6 +1,4 @@
 import {create} from "zustand/react";
-import diary from "../pages/Diary.jsx";
-import Diary from "../pages/Diary.jsx";
 
 const mockData = [
     {
@@ -26,7 +24,10 @@ const mockData = [
 const useDiaryStore = create(set=>({
     DiaryList : mockData,
     onCreate : (newDiary) => set((state)=> ({
-        DiaryList : [...state.DiaryList, newDiary]
+        DiaryList : [...state.DiaryList,
+            {...newDiary,
+                date : new Date(newDiary.date).getTime()}
+        ]
     })),
     onUpdate : (updateDiary) => set((state)=> ({
         DiaryList : state.DiaryList.map((oneDiary) => oneDiary.id === updateDiary.id ? {
@@ -37,7 +38,7 @@ const useDiaryStore = create(set=>({
         } : oneDiary)
     })),
     onDelete : (targetId) => set((state)=> ({
-        DiaryList : state.DiaryList.filter((oneDiary))
+        DiaryList : state.DiaryList.filter((oneDiary)=> String(oneDiary.id) !== String(targetId))
     }))
 
 }))

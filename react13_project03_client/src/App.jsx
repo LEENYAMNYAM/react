@@ -14,7 +14,7 @@ export const DiaryDispatchContext = React.createContext();
 function reducer(state, action) {
     switch (action.type) {
         case 'INIT': {
-            console.log("init ")
+            console.log("init : ", action.data)
             return action.data;
         }
         case 'CREATE': {
@@ -41,8 +41,12 @@ function App() {
                     type : 'INIT',
                     data : resp.data
                 })
+                setIsDataLoaded(true)
             })
-        setIsDataLoaded(true)
+            .catch(err => {
+                console.error("데이터 불러오기 실패 : ", err)
+            })
+
     }, [])
 
     //추가

@@ -19,12 +19,11 @@ const DiaryList = ({data}) => {
     const [sortType, setSortType] = useState("latest");
     const [sortedData, setSortedData] = useState([]);
     useEffect(() => {
-        if (!Array.isArray(data)) return;
         const compare = (a, b) => {
             if(sortType === "latest") {
-                return new Date(b.date) - new Date(a.date)
+                return Number(b.date) - Number(a.date)
             }else if(sortType === "oldest") {
-                return new Date(a.date) - new Date(b.date);
+                return Number(a.date) - Number(b.date);
             }
         }
         // JSON형태로 파싱

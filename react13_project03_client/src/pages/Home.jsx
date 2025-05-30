@@ -13,29 +13,24 @@ export default function Home() {
 
     const [filteredData, setFilteredData] = useState([])
     useEffect(() => {
-        if (data.length >= 1) {
-            const {beginTimeStamp, endTimeStamp} = getMonthRangeByDate(pivotDate)
+        if (!Array.isArray(data) || data.length === 0) {
+            setFilteredData([]);
+            return;
+        }
+        const { beginTimeStamp, endTimeStamp } = getMonthRangeByDate(pivotDate);
             console.log('beginTimeStamp : ', beginTimeStamp)
             console.log('endTimeStamp : ', endTimeStamp)
             console.log ('begin time : ' , `${pivotDate.getMonth()}`)
             console.log ('end time : ', `${pivotDate.getMonth()+1}` )
-
-            setFilteredData(() => {
-                 const filtered = data.filter(it => {
-                     const itemDate = new Date(it.date);
-                     return(
-                         itemDate.getMonth() === pivotDate.getMonth() &&
-                         itemDate.getFullYear() === pivotDate.getFullYear()
-                     );
-                 });
-                 setFilteredData(filtered)
-                // data.filter((it) => (`${pivotDate.getMonth()}` <= it.date.getMonth()) && (it.date.getMonth() <= `${pivotDate.getMonth()+1}`))
-            })
-        }else{
-            setFilteredData([])
-        }
-
-    }, [pivotDate]);
+        const filtered = data.filter(it => {
+            const itemDate = new Date(it.date);
+            return (
+                itemDate.getMonth() === pivotDate.getMonth() &&
+                itemDate.getFullYear() === pivotDate.getFullYear()
+            );
+        });
+        setFilteredData(filtered);
+    }, [pivotDate, data]);
 
     const onDecreaseMonth = () => {
         setPivotDate(new Date(pivotDate.getFullYear(), pivotDate.getMonth() - 1));
